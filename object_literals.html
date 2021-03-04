@@ -1,0 +1,23 @@
+<!--
+https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Values,_variables,_and_literals#%EA%B0%9D%EC%B2%B4_%EB%A6%AC%ED%84%B0%EB%9F%B4
+-->
+
+<script>
+
+//
+var obj = {
+    // __proto__
+    __proto__: theProtoObj,
+    // ‘handler: handler’의 단축 표기
+    handler,
+    // Methods
+    toString() {
+     // Super calls
+     return "d " + super.toString();
+    },
+    // Computed (dynamic) property names
+    [ 'prop_' + (() => 42)() ]: 42
+};
+
+
+</script>

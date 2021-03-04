@@ -1,0 +1,38 @@
+<!--
+https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/for...of
+-->
+<script>
+const array1 = ['a', 'b', 'c'];
+
+for (const key in array1) {
+  console.log(key);
+}
+// "0"
+// "1"
+// "2"
+
+for (const value of array1) {
+  console.log(value);
+}
+// "a"
+// "b"
+// "c"
+
+
+////////Map에 대해 반복:
+let iterable = new Map([["a", 1], ["b", 2], ["c", 3]]);
+
+for (let entry of iterable) {
+  console.log(entry);
+}
+// [a, 1]
+// [b, 2]
+// [c, 3]
+
+for (let [key, value] of iterable) {
+  console.log(value);
+}
+// 1
+// 2
+// 3
+</script>

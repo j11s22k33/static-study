@@ -1,0 +1,30 @@
+<!--
+https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Functions/%EC%95%A0%EB%A1%9C%EC%9A%B0_%ED%8E%91%EC%85%98
+
+-->
+
+<script>
+
+///////
+let es = function(param) { 
+    console.log(param)
+};
+
+let es6 = (param) => {
+    console.log(param)
+};
+es(100);
+es6(200);
+
+//즉시실행함수(immediate function)
+(function(param) { 
+    console.log(param)
+})(300);
+
+((param) => {
+    console.log(param)
+})(400)
+
+
+
+</script>

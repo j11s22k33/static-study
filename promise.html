@@ -1,0 +1,96 @@
+<html>
+<body>
+<script>
+
+/**
+https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Promise
+*/
+
+/////////////////////////
+//
+// 기본
+/*
+pending => resolved => then 
+
+resolve 또는 reject 실행하지 않으면 
+다음 code가 실행되지 않는다
+
+
+> Output
+1번
+2번
+3번
+4번
+결과값 20
+마지막에 불려요
+*/
+//
+/////////////////////////
+new Promise((resolve, reject)=>{ 
+	console.log('1번');
+	resolve(10)
+})
+.then((val)=>{
+	return new Promise((resolve, reject)=> {
+		setTimeout(function() {		
+			console.log('2번');
+			resolve(val+10)
+		}, 1000) 
+	})
+})
+.then((val)=>{
+  	console.log('3번')
+	return val
+})
+.then((val)=>{
+	console.log('4번');
+	console.log(`결과값 ${val}`)
+})
+.catch((error)=> {
+	console.log("Reject 또는 에러 발생시")
+})
+.finally(()=>{
+	console.log("마지막에 불려요")
+})
+
+/////////////////////////
+//
+// catch 사용법
+//
+/////////////////////////
+var p1 = new Promise(function(resolve, reject) {
+  throw 'Uh-oh!';
+});
+
+p1.catch(function(e) {
+  console.log(e); // "Uh-oh!"
+});
+
+var p2 = new Promise(function(resolve, reject) {
+  setTimeout(function() {
+    throw 'Uncaught Exception!';
+  }, 1000);
+});
+
+p2.catch(function(e) {
+  console.log(e); // 이는 전혀 호출되지 않음
+});
+
+var p3 = new Promise(function(resolve, reject) {
+  setTimeout(function() {
+	try {
+		throw 'Uncaught Exception!';
+	} catch(e) {
+		reject(e)
+	}
+    
+  }, 1000);
+});
+
+p3.catch(function(e) {
+  console.log(e); // 호출되요
+});
+
+</script>
+</body>
+</html>

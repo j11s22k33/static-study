@@ -1,0 +1,31 @@
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<div id="app">
+</div>
+
+<script>
+
+  const es = function () {
+    return {
+      name: "Jhone", age: 40
+    }
+  }
+
+  const es6_1 = () => {
+    return {
+      name: "Jhone", age: 40
+    }
+  }
+
+  const es6_2 = () => ({
+    name: "Jhone", age: 40
+
+  })
+
+  console.log(es())
+  console.log(es6_1())
+  console.log(es6_2())
+  //1.2.2
+</script>

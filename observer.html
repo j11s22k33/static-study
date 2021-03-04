@@ -1,0 +1,52 @@
+		/////////////////////////////
+		///////////////////////////////
+		// // 교차영역 감지 - Image-LazyLoad 에 쓰인다.
+        //https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
+		/////////////////////////////
+				
+		
+        el.intersectionObserver = new IntersectionObserver((entries, observer) => {
+			//threshold에 설정한 교차영역 진입했을때 호출된다
+            entries.forEach(entry => {
+				if(!entry.isIntersecting) return //threshold 지점 되면 entry.isIntersecting==true 된다
+				
+                el.intersectionObserver.unobserve(el) //관찰중지
+
+                el.setAttribute('src', el.tmp)
+                // el.onload = function() {}
+                el.onerror = function() {
+                    if(el.getAttribute('src') != imgErr) el.setAttribute('src', imgErr)
+                }
+            })
+        }, {
+            root: null, // .container class를 가진 엘리먼트를 root로 설정. null일 경우 브라우저 viewport
+            rootMargin: "0px 0px 0px 0px", // rootMargin을 '10px 10px 10px 10px'로 설정
+            threshold: [0.5, 1.0] // 타겟 엘리먼트가 교차영역에 진입했을 때, 교차영역에 타켓 엘리먼트의 50%가 있을 때, 교차 영역에 타켓 엘리먼트의 100%가 있을 때 observe가 반응한다.
+        })
+        el.intersectionObserver.observe(el) //관찰시작
+		
+		//observe 중지하고 싶을때
+		if(el.intersectionObserver) el.intersectionObserver.disconnect() //옵져버 제거
+		
+		
+		
+		/////////////////
+			/////////////////////////////
+         // 변경감지 - 속성,자식노드
+         //https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver#Example_usage
+		 ///////
+		 ////////
+         el.mutationObserver = new MutationObserver((mutationList, observer) => {
+             for(let mutation of mutationList) {                
+                 if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
+                     break
+                 } else if (mutation.type === 'childList') {
+						console.log('A child node has been added or removed.');
+		         }
+             }
+         })
+         el.mutationObserver.observe(el, {attributes:true, childList:false, subtree:false})
+		 
+		 //observe 중지하고 싶을때
+		if(el.mutationObserver) el.mutationObserver.disconnect() //옵져버 제거
+        
