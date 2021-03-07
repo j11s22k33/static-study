@@ -1,0 +1,26 @@
+<script>
+  // https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/globalThis
+
+  // node.js 환경에서 window is not defined 이다.
+  // 서로 다른 환경에서 전역 객체 얻는 방법은 아래와 같다
+
+  var getGlobal = function () {
+    if (typeof globalThis !== "undefined") {
+      return globalThis;
+    }
+    if (typeof self !== "undefined") {
+      return self;
+    }
+    if (typeof window !== "undefined") {
+      return window;
+    }
+    if (typeof global !== "undefined") {
+      return global;
+    }
+    throw new Error("unable to locate global object");
+  };
+
+  var globals = getGlobal();
+
+  console.log(globals.setTimeout);
+</script>
