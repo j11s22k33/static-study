@@ -1,0 +1,338 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Retrieving Element's Width and Height Using DOM Javascript</title>
+<script type="text/javascript" src="../js/css3-multi-coumn.js"></script>
+<style type="text/css">
+html {
+	margin: 0;
+	padding: 0;
+	position:  relative;
+}
+body {
+	margin: 8px;
+	padding: 0;
+	
+}
+#Container {
+	width: 600px;
+	padding: 3px;
+	background-color:#FFCC66;
+	margin: 1em 0;
+}
+#Test {
+	margin: 2px;
+	padding: 3px;
+	border: 2px solid #bbb;
+	background-color:#FFCCCC;
+	font-family: "Courier New", Courier, mono; 
+}
+table, td {
+	border: 1px solid #ccc;
+	padding: 2px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: x-small;
+}
+</style>
+</head>
+
+<body>
+
+<table>
+<tr>
+  <th>Safari 1.3 </th>
+  <th>Opera 7.54 </th>
+  <th>Opera 8 </th>
+  <th>Firefox 1.0.4</th>
+  <th>Netscape 7.1</th>
+  <th>IE 6 </th>
+  <th>Yours</th>
+  <th>Method</th>
+</tr>
+<tr>
+  <td>586px</td>
+  <td>0px</td>
+  <td>596px</td>
+  <td> 586px</td>
+  <td>586px</td>
+  <td>undefined</td>
+  <td id="dGCS"></td>
+  <td>document.defaultView.getComputedStyle(elementNode,"").getPropertyValue("width")</td>
+</tr>
+<tr>
+  <td>undefined</td>
+  <td>0px</td>
+  <td>596px</td>
+  <td>586px</td>
+  <td>586px</td>
+  <td>undefined</td>
+  <td id="wGCS"></td>
+  <td>window.getComputedStyle(elementNode,"").getPropertyValue("width");</td>
+</tr>
+<tr>
+  <td>undefined</td>
+  <td>undefined</td>
+  <td>undefined</td>
+  <td> undefined</td>
+  <td>undefined</td>
+  <td>auto</td>
+  <td id="eCS"></td>
+  <td>elementNode.currentStyle.width</td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td>0</td>
+  <td>0</td>
+  <td> undefined</td>
+  <td>undefined</td>
+  <td>0</td>
+  <td id="ePW"></td>
+  <td>elementNode.style.pixelWidth</td>
+</tr>
+<tr>
+  <td>596</td>
+  <td>596</td>
+  <td>596</td>
+  <td>596</td>
+  <td>596</td>
+  <td>596</td>
+  <td id="eOW"></td>
+  <td>elementNode.offsetWidth</td>
+</tr>
+<tr>
+  <td>592</td>
+  <td>592</td>
+  <td>592</td>
+  <td>592 </td>
+  <td>0</td>
+  <td>0</td>
+  <td id="eCW"></td>
+  <td>elementNode.clientWidth</td>
+</tr>
+<tr>
+  <td>596</td>
+  <td>596</td>
+  <td>596</td>
+  <td>596</td>
+  <td>596</td>
+  <td>596</td>
+  <td id="eSW"></td>
+  <td>elementNode.scrollWidth</td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td id=""></td>
+  <td>&nbsp;</td>
+</tr>
+<tr>
+  <th>Safari 1.3</th>
+  <th>Opera 7.54 </th>
+  <th>Opera 8 </th>
+  <th>Firefox 1.0.4</th>
+  <th>Netscape 7.1</th>
+  <th>IE 6 </th>
+  <th>Yours</th>
+  <th>Method</th>
+</tr>
+<tr>
+  <td>341</td>
+  <td>341</td>
+  <td>341</td>
+  <td>349</td>
+  <td>349</td>
+  <td>335</td>
+  <td id="getOffsetTop"></td>
+  <td>getOffsetTop</td>
+</tr>
+<tr>
+  <td>349</td>
+  <td>349</td>
+  <td>349</td>
+  <td>349</td>
+  <td>349</td>
+  <td>343</td>
+  <td id="getOffsetTop2"></td>
+  <td>getOffsetTop + document.body.offsetTop</td>
+</tr>
+<tr>
+  <td>undefined</td>
+  <td>CSS1Compat</td>
+  <td>CSS1Compat</td>
+  <td> CSS1Compat </td>
+  <td>&nbsp;</td>
+  <td> CSS1Compat </td>
+  <td id="compatMode"></td>
+  <td><em>document.compatMode</em></td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td id=""></td>
+  <td>&nbsp;</td>
+</tr>
+<tr>
+  <td>undefined</td>
+  <td>&nbsp;</td>
+  <td>3px</td>
+  <td>3px</td>
+  <td>3px</td>
+  <td>undefined</td>
+  <td id="wCSPL"></td>
+  <td>window.getComputedStyle(elementNode,"").getPropertyValue("padding-left");</td>
+</tr>
+<tr>
+  <td>undefined</td>
+  <td>&nbsp;</td>
+  <td>undefined</td>
+  <td>undefined</td>
+  <td>undefined</td>
+  <td>3px</td>
+  <td id="eCSPL"></td>
+  <td>elementNode.currentStyle.paddingLeft</td>
+</tr>
+</table>
+ 
+ <div id="Container">
+ 	<p id="Test">This is the Test paragraph. <br /> 
+ 	It's dimension are set through CSS.<br />
+ 	#Container {<br />
+width: 600px;<br />
+padding: 3px;<br />
+background-color:#FFCC66;<br />
+margin: 1em 0;<br />
+}<br />
+#Test {<br />
+margin: 2px;<br />
+padding: 3px;<br />
+border: 2px solid #bbb;
+<br />
+background-color:#FFCCCC;<br />
+font-family: &quot;Courier New&quot;, Courier, mono;<br />
+}
+</p>
+</div>
+<script type="text/javascript">
+
+	function getOffsetTop(obj) {
+		var cur = 0;
+		if(obj.offsetParent) {		
+			while(obj.offsetParent) {
+				cur+=obj.offsetTop;
+				obj = obj.offsetParent;
+			}
+		}		
+		return cur;
+	}
+
+	function getOffsetTop2(obj) {
+		var cur = 0;
+		if(obj.offsetParent) {		
+			while(obj.offsetParent) {
+				cur+=obj.offsetTop;
+				obj = obj.offsetParent;
+			}
+		}		
+ 
+		return cur + document.body.offsetTop;
+	}
+	
+	var elementNode = document.getElementById('Test');
+	var value;
+	try {
+		value = document.defaultView.getComputedStyle(elementNode,"").getPropertyValue("width");
+	} catch(e) {
+		value = 'undefined';
+	}
+	document.getElementById('dGCS').appendChild(document.createTextNode(value));
+
+	try {
+		value = window.getComputedStyle(elementNode,"").getPropertyValue("width");
+	} catch(e) {
+		value = 'undefined';
+	}	
+	document.getElementById('wGCS').appendChild(document.createTextNode(value));
+		
+	try {
+		value = elementNode.currentStyle.width;
+	} catch(e) {
+		value = 'undefined';
+	}		
+	document.getElementById('eCS').appendChild(document.createTextNode(value));
+
+	try {
+		value = elementNode.clientWidth;
+	} catch(e) {
+		value = 'undefined';
+	}		
+	document.getElementById('eCW').appendChild(document.createTextNode(value));
+
+	try {
+		value = elementNode.style.pixelWidth;
+	} catch(e) {
+		value = 'undefined';
+	}		
+	document.getElementById('ePW').appendChild(document.createTextNode(value));
+
+	try {
+		value = elementNode.offsetWidth;
+	} catch(e) {
+		value = 'undefined';
+	}		
+	document.getElementById('eOW').appendChild(document.createTextNode(value));
+
+	try {
+		value = elementNode.scrollWidth;
+	} catch(e) {
+		value = 'undefined';
+	}		
+	document.getElementById('eSW').appendChild(document.createTextNode(value));
+
+	try {
+		value = document.compatMode;
+	} catch(e) {
+		value = 'undefined';
+	}		
+	document.getElementById('compatMode').appendChild(document.createTextNode(value));
+	
+	try {
+		value = window.getComputedStyle(elementNode,"").getPropertyValue("padding-left");
+	} catch(e) {
+		value = 'undefined';
+	}		
+	document.getElementById('wCSPL').appendChild(document.createTextNode(value));
+
+	try {
+		value = elementNode.currentStyle.paddingLeft;
+	} catch(e) {
+		value = 'undefined';
+	}		
+	document.getElementById('eCSPL').appendChild(document.createTextNode(value));
+	
+	try {
+		value = getOffsetTop(elementNode);
+	} catch(e) {
+		value = 'undefined';
+	}		
+	document.getElementById('getOffsetTop').appendChild(document.createTextNode(value));
+	
+	try {
+		value = getOffsetTop2(elementNode);
+	} catch(e) {
+		value = 'undefined';
+	}		
+	document.getElementById('getOffsetTop2').appendChild(document.createTextNode(value));
+
+</script>
+http://www.georgehernandez.com/xWebs/CSS/IEDimensions.htm
+</body>
+</html>

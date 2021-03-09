@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<style type="text/css">
+@CHARSET "UTF-8";
+
+.content_boxsizing {/*구버전 IE 방식(5.5)*/
+	box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	-o-box-sizing: content-box;
+	-ms-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	-o-box-sizing: content-box;
+	-o-box-sizing: content-box;
+}
+
+.border_boxsizing { /*CSS표준*/
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	-o-box-sizing: border-box;
+}
+
+.padding_boxsizing {
+	box-sizing: padding-box;
+	-moz-box-sizing: padding-box;
+	-webkit-box-sizing: padding-box;
+	-o-box-sizing: padding-box;
+	-ms-box-sizing: padding-box;
+	-webkit-box-sizing: padding-box;
+	-o-box-sizing: padding-box;
+	-o-box-sizing: padding-box;
+}
+
+.inherit_boxsizing {
+	box-sizing: inherit;
+	-moz-box-sizing: inherit;
+	-webkit-box-sizing: inherit;
+	-o-box-sizing: inherit;
+	-ms-box-sizing: inherit;
+	-webkit-box-sizing: inherit;
+	-o-box-sizing: inherit;
+	-o-box-sizing: inherit;
+}
+</style>
+<script type="text/javascript">
+	window.onload = function() {
+
+	}
+</script>
+</head>
+<body>
+	<div class="content_boxsizing" style="background-color: yellow; width: 300px; height: 300px; display: inline-block; border: 20px solid red; padding:20px; margin:20px">content box-sizing</div>
+	<div class="border_boxsizing" style="background-color: green; width: 300px; height: 300px; display: inline-block; border: 20px solid blue; padding:20px; margin:20px">border box-sizing</div>
+	<div class="padding_boxsizing" style="background-color: yellow; width: 300px; height: 300px; display: inline-block; border: 20px solid red; padding:20px; margin:20px">padding box-sizing</div>
+	<div class="inherit_boxsizing" style="background-color: green; width: 300px; height: 300px; display: inline-block; border: 20px solid blue; padding:20px; margin:20px">inherit box-sizing</div>
+</body>
+</html>

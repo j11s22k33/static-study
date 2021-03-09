@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<script type="text/javascript">
+	var worker = null;
+	window.onload = function() {
+		if (typeof (Worker) != "undefined") {
+			worker = new Worker("worker.js");
+			worker.onmessage = function(e) {
+				document.getElementById("result").innerHTML = e.data;
+			};
+		} else {
+			alert("not supported");
+		}
+	}
+	window.onunload=function(){
+		worker.terminate();	
+	};
+</script>
+</head>
+<body>
+	<input type="button" value="worker start" onclick="worker.postMessage('start')">
+	<input type="button" value="worker stop" onclick="worker.postMessage('stop')">
+	<h1 id="result">0</h1>
+</body>
+</html>

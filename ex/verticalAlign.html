@@ -1,0 +1,31 @@
+
+<!-- 
+				inline 또는 table-cell 가진 것들만 적용된다 
+-->
+
+
+<!DOCTYPE>
+<html lang="ko">
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style type="text/css">
+	* {
+		outline: 1px dotted pink;
+	}
+</style>
+</head>
+<body>
+<!-- 절대좌표 X -->
+<div align="center" style="position: absolute; left:100px; top:100px; width:200px; height:200px; vertical-align: middle; display:table-cell;">하이-0</div>
+
+<!-- 상대좌표 O -->
+<div align="center" style="position: relative; left:100px; top:100px; width:200px; height:200px; vertical-align: middle; display:table-cell;">하이-1</div>
+
+<!-- 정적좌표 O -->
+<div align="center" style="left:100px; top:100px; width:200px; height:200px; vertical-align: middle; display:table-cell;">하이-2</div>
+
+<!-- float X -->
+<div align="center" style="float:left; left:100px; top:100px; width:200px; height:200px; vertical-align: middle; display:table-cell;">하이-3</div>
+</body>
+</html>

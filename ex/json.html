@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<script type="text/javascript">
+	window.onload = function() {
+		//문자열로 변환
+		
+		//var string = JSON.stringify([ "111", "222", "333" ]);
+		var string = JSON.stringify({
+			"aaa" : "111",
+			"bbb" : "222",
+			"ccc" : "333",
+		});
+		
+		log(typeof (string));
+
+		
+		//JSON 으로 변환
+		var parseData = JSON.parse(string);
+		log(typeof (parseData));
+		for ( var a in parseData) {
+			log(a + " : " + parseData[a]);
+		}
+	}
+	function log(msg) {
+		document.getElementById("result").innerHTML += msg + "<br>";
+	}
+</script>
+</head>
+<body>
+	<h1 id="result"></h1>
+</body>
+</html>

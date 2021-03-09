@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<style type="text/css">
+@CHARSET "UTF-8";
+
+.transitionTop {
+	-webkit-transition-property: top;
+	-webkit-transition-duration: 1s;
+	-webkit-transition-timing-function: ease-in;
+	-webkit-transition-delay: 0s;
+}
+.transitionLeft {
+	-webkit-transition-property: left;
+	-webkit-transition-duration: 1s;
+	-webkit-transition-timing-function: ease-in;
+	-webkit-transition-delay: 0s;
+}
+</style>
+<script type="text/javascript">
+	window.onload = function() {
+		
+	}
+	
+	document.onkeydown=function(event){
+		switch(event.which){
+			case 37:
+				document.getElementById("box").style.left = "400px";
+				break;
+			case 39:
+				document.getElementById("box").style.left = "700px";
+				break;
+			case 38:
+				document.getElementById("box1").style.top = "0px";
+				break;
+			case 40:
+				document.getElementById("box1").style.top = "300px";
+				break;
+		}
+	}
+</script>
+</head>
+<body>
+	<div id="box" class="transitionLeft" style="position: absolute; left: 400px; top: 0px; width: 300px; height: 300px; background-color: yellow;"></div>
+	<div id="box1" class="transitionTop" style="position: absolute; left: 0px; top: 0px; width: 300px; height: 300px; background-color: blue;"></div>
+</body>
+</html>

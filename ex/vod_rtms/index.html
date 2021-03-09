@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)http://www.homux.co.kr/demo/simple_ui/ -->
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="apple-mobile-web-appcapable" content="yes">
+<!-- <meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=1;"> -->
+<title>Homux - Mobile Streaming Demo</title>
+<link rel="apple-touch-icon" href="http://www.homux.co.kr/demo/simple_ui/images/apple-touch-icon.png">
+<link type="text/css" rel="stylesheet" href="res/homux.css">
+<script type="text/javascript" src="res/homux-mini.js"></script>
+<script>
+<!--
+	window.onload = function() {
+		// 브라우저 셋팅, 브라우저 마다 VOD 태그가 다르다
+		//browser.iphone = true;
+		//browser.android = true;   
+
+		idle = loading_init();
+		getCateList();
+		if (!browser.ipod && !browser.ipad && !browser.iphone && !browser.android) {
+			var footer = document.getElementById("footer");
+			oImg = $c("img");
+			oImg.src = "res/homux-qr.png";
+			footer.appendChild(oImg);
+		}
+	}
+//-->
+</script>
+</head>
+<body>
+	<div id="wrap">
+		<div id="smt_hd">
+			<div class="l_n" id="l_n"></div>
+			<div class="tt" id="tt">Mobile Streaming Demo</div>
+			<div class="r_n" id="r_n"></div>
+		</div>
+		<div class="content" id="content">
+			<div class="ll" classname="ll">
+				<ul>
+					<a id="0" onclick="idle=loading_start(); cur_pos=0; makeVodList(this);">
+						<li>
+							<span style="padding: 0px 0px 0px 10px;">1. Global Advertising Archive</span>
+						</li>
+					</a>
+				</ul>
+				<ul>
+					<a id="1" onclick="idle=loading_start(); cur_pos=0; makeVodList(this);">
+						<li>
+							<span style="padding: 0px 0px 0px 10px;">2. Movies</span>
+						</li>
+					</a>
+				</ul>
+				<ul>
+					<a id="2" onclick="idle=loading_start(); cur_pos=0; makeVodList(this);">
+						<li>
+							<span style="padding: 0px 0px 0px 10px;">3. Music Video</span>
+						</li>
+					</a>
+				</ul>
+				<ul>
+					<a id="3" onclick="idle=loading_start(); cur_pos=0; makeVodList(this);">
+						<li>
+							<span style="padding: 0px 0px 0px 10px;">4. Sports</span>
+						</li>
+					</a>
+				</ul>
+			</div>
+		</div>
+		<canvas id="loading_canvas" width="50" height="50" style="top: 269.5px; left: 935px; display: none;"></canvas>
+		<div id="debug" style="border: 1px solid #ddd; display: none;"></div>
+	</div>
+	<div id="footer">
+		comjakma@paran.com
+		<br>
+		<img src="res/homux-qr.png">
+	</div>
+	<br>
+	<br>
+	<br>
+	<br>
+</body>
+</html>

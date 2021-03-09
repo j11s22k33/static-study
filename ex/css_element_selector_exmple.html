@@ -1,0 +1,207 @@
+<!DOCTYPE>
+<html lang="ko">
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style type="text/css">
+@CHARSET "UTF-8";
+
+* * {
+	border: 0px dotted pink;
+	outline: 1px dotted pink;
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+	box-sizing: border-box;
+	-o-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+}
+
+@font-face {
+	font-family: 'NanumGothicBold';
+	src: url('font/NanumGothicBold.woff'); /* Internet Explorer */
+	src: local('NanumGothicBold'), url('font/NanumGothicBold.woff') format(woff); /* Firefox, Opera, Safari and Google Chrome */
+}
+
+body {
+	font-family: 'NanumGothicBold', serif;
+	line-height: 100%;
+	font-size: 100%;
+	font-weight: 400;
+	background: #000000;
+	color: #ffffff;
+	overflow: hidden;
+	visibility: hidden;
+	width: 1152px;
+	height: 648px;
+}
+
+ol,ul {
+	list-style: none;
+}
+
+blockquote,q {
+	quotes: none;
+}
+
+blockquote:before,blockquote:after,q:before,q:after {
+	content: '';
+	content: none;
+}
+
+ins {
+	text-decoration: none;
+}
+
+del {
+	text-decoration: line-through;
+}
+
+table {
+	border-spacing: 0;
+	table-layout: fixed;
+}
+
+/* #################### 샘플 css 셀렉터 이용 ################ */
+
+/* 자세한 사항은 
+http://help.dottoro.com/lctodmkm.php
+의 css > selectors and pseodus 참조
+*/
+
+/* ***************************************  bg0 ********* */
+#bg0>.box0_on>.box0 {
+	width: 100px;
+	height: 100px;
+	background-color: yellow;
+}
+
+#bg0>.box1_on>.box1 {
+	width: 100px;
+	height: 100px;
+	background-color: green;
+}
+
+/* .box0_on.rightBorder 클래스 2개가 적용되었을때 하위에 적용*/
+#bg0>[readonly][name]>.box0 { /*속성2개 multi select*/
+	border-right: 5px solid red;
+}
+
+#bg0>.box0_on.rightBorder>.box0 {    /*클래스2개 multi select*/
+	border-right: 5px solid red;
+}
+
+#bg0>.box1_on.rightBorder>.box1 {
+	border-right: 5px solid red;
+}
+
+/* ***************************************  bg1 ********* */
+#bg1>.box0_on>.box0 {
+	width: 100px;
+	height: 100px;
+	background-color: yellow;
+}
+
+#bg1>.box1_on>.box1 {
+	width: 100px;
+	height: 100px;
+	background-color: green;
+}
+
+/* .box0_on, .box1_on 2개의 클래스 하위 div에 보더 적용*/
+#bg1>.box0_on>div,#bg1>.box1_on>div {
+	border-right: 5px solid red;
+}
+
+/* ***************************************  bg2 ********* */
+/* bg2 하위의 모든 div 적용*/
+#bg2 div {
+	width: 50px;
+	height: 50px;
+	background-color: white;
+}
+
+/* ***************************************  bg3 ********* */
+/* bg3 하위 div만 적용*/
+#bg3>div {
+	width: 50px;
+	height: 50px;
+	background-color: white;
+}
+
+/* ***************************************  bg4 ********* */
+#bg4>div{
+	width:30px;
+	height:30px;
+	float:left;
+	border: 1px solid white;
+}
+#bg4>div:first-child {
+	background-color: yellow;
+}
+#bg4>div:last-child {
+	background-color: red;
+}
+#bg4>div[title=sub] {
+	background-color: blue;
+}
+#bg4>div:nth-child(4) {
+	background-color: pink;
+}
+#bg4>div#four{
+	background-color: gray;
+}
+</style>
+<!-- <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script> -->
+<script type="text/javascript">
+	//마우스 드래그 방지
+	document.ondragstart = function() {
+		return false;
+	};
+	document.onselectstart = function() {
+		return false;
+	};
+
+	window.onload = function() {
+		//pageZoom();
+		document.body.style.visibility = "visible";
+	};
+	function pageZoom() {
+		//document.body.style.zoom = $(window).width() / $(document.body).width();
+	}
+</script>
+</head>
+<body>
+	<div id="bg0">
+		<div class="box0_on box1_on">
+			<div class="box0"></div>
+			<div class="box1"></div>
+		</div>
+		<div class="box0_on box1_on rightBorder">
+			<div class="box0"></div>
+			<div class="box1"></div>
+		</div>
+	</div>
+	<div id="bg1">
+		<div class="box0_on box1_on">
+			<div class="box0"></div>
+			<div class="box1"></div>
+		</div>
+	</div>
+	<div id="bg2">
+		<div>
+			<div></div>
+		</div>
+	</div>
+	<div id="bg3">
+		<div>
+			<div></div>
+		</div>
+	</div>
+	<div id="bg4">
+		<div>0</div><div>1</div><div title="sub">2</div><div>3</div><div id="four">4</div><div>5</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+@charset "UTF-8";
+
+*, ::after, ::before {
+	box-sizing: border-box;
+	outline: 1px dotted violet;
+}
+
+@font-face {
+  font-family: Digital-7;
+  font-weight: normal;
+  src: url(font/digital-7.ttf);
+  src: url(font/digital-7.ttf) format(truetype);
+}
+
+
+vertical-align: center;
+
+body {
+	background-color: #f5f5f5;
+	color: #212529;
+	font-family: sans-serif, Digital-7;
+	font-size: 1rem;
+	text-align: initial;
+	font-weight: initial;
+	line-height: initial;
+	letter-spacing: initial;
+	word-break: break-all;
+	word-spacing: initial;
+	white-space: initial;
+	overflow: initial;
+	text-overflow: initial;
+}
+
+.c-header {
+	background-color: #fff;
+	padding: 1rem;
+	border-radius: 0rem 0rem 1rem 1rem;
+	box-shadow: 0rem 1rem 3rem 0rem rgba(0, 0, 0, 0.2);
+}
+
+.c-body {
+	margin: 2rem auto;
+}
+
+.c-img-circle {
+	clip-path: circle(at center);
+}
+
+#e_clockConainer {
+    padding: 10px;
+}
+#e_clockTitle {
+	font-size: 60px;
+	font-weight:800;
+	color:#e54353;
+}
+#e_clockDesc {
+	font-size:28px;
+	padding:10px 0;
+	color:rgba(157, 155, 147, 0.8);
+}
+#e_clockContents>div {
+	display:table-cell;
+	vertical-align: middle;
+}
+
+#e_clock {
+	width:200px;
+    color: #b8b8b8;
+    font-weight:800;
+    font-family: digital-7;
+    text-align: center;
+}
+#e_clockDate {
+    font-size: 25px;
+    letter-spacing: 1px;
+}
+#e_clockTime {
+    font-size: 60px;
+}

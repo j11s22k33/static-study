@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<script type="text/javascript" src="jWebSocket.js"></script>
+<script type="text/javascript">
+	var wss = [];
+	var console = null;
+	var consoleEnable = true;
+	var msg = null;
+	var url = null;
+	var user = null;
+	var pass = null;
+	var onopenCnt = null;
+	var onmessageCnt = null;
+	var oncloseCnt = null;
+	var connectedCnt = null;
+	var connectOptions = {
+		OnOpen : function(event) {
+			log("=============onopen");
+			onopenCnt.innerHTML = Number(onopenCnt.innerHTML) + 1;
+		},
+		OnMessage : function(event, token) {
+			log("=============onmessage");
+			onmessageCnt.innerHTML = Number(onmessageCnt.innerHTML) + 1;
+			log("token.type : " + token.type);
+			//log("token.vod_menu : " + token["vod_menu"]);
+			log(event.data);
+
+			//var d = JSON.parse(event.data);
+			//log(d["type"]);
+			//token.type 와 JSON.parse(event.data)["type"] 는 같은 방법이다 
+		},
+		OnClose : function(event) {
+			log("=============onclose");
+			oncloseCnt.innerHTML = Number(oncloseCnt.innerHTML) + 1;
+		}
+	};
+
+	window.onload = function() {
+		console = document.getElementById("console");
+		msg = document.getElementById("msg");
+		url = document.getElementById("url");
+		user = document.getElementById("user");
+		pass = document.getElementById("pass");
+		onopenCnt = document.getElementById("onopenCnt");
+		onmessageCnt = document.getElementById("onmessageCnt");
+		oncloseCnt = document.getElementById("oncloseCnt");
+		connectedCnt = document.getElementById("connectedCnt");
+	}
+	window.onunload = function() {
+		closeAll();
+	}
+
+	function logonAll() {
+		for ( var i = 0; i < connectedCnt.value; i++) {
+			var ws = createJWebSocketJSONClient();
+			logon(ws);
+			wss.push(ws);
+		}
+	}
+	function openAll() {
+		for ( var i = 0; i < connectedCnt.value; i++) {
+			var ws = createJWebSocketJSONClient();
+			oopen(ws);
+			wss.push(ws);
+		}
+	}
+	function closeAll() {
+		while (wss.length > 0) {
+			cclose(wss.pop());
+		}
+	}
+	function cclose(ws) {
+		try {
+			var lRes = ws.close({
+				"timeout" : 3000
+			});
+			//log(toString(lRes));
+		} catch (e) {
+			log(e.message);
+		}
+	}
+	function loginAll() {
+		for ( var i = 0; i < wss.length; i++) {
+			login(wss[i]);
+		}
+	}
+	function login(ws) {
+		try {
+			var lRes = ws.login(user.value, pass.value);
+			//log(toString(lRes));
+		} catch (e) {
+			log(e.message);
+		}
+	}
+	function logoutAll() {
+		for ( var i = 0; i < wss.length; i++) {
+			logout(wss[i]);
+		}
+	}
+	function logout(ws) {
+		try {
+			var lRes = ws.logout();
+			//log(toString(lRes));
+		} catch (e) {
+			log(e.message);
+		}
+	}
+	function echoAll() {
+		for ( var i = 0; i < wss.length; i++) {
+			echo(wss[i]);
+		}
+	}
+	function echo(ws) {
+		try {
+			var lRes = ws.echo(msg.value);
+			//log(toString(lRes));
+		} catch (e) {
+			log(e.message);
+		}
+	}
+	function sendTextAll() {
+		for ( var i = 0; i < wss.length; i++) {
+			sendText(wss[i]);
+		}
+	}
+	function sendText(ws) {
+		try {
+			var targetClientID = null;
+			var lRes = ws.sendText(targetClientID, msg.value);
+			//log(toString(lRes));
+		} catch (e) {
+			log(e.message);
+		}
+	}
+	function broadcastTextAll() {
+		for ( var i = 0; i < wss.length; i++) {
+			broadcsetText(wss[i]);
+		}
+	}
+	function broadcsetText(ws) {
+		try {
+			var pool = null;
+			var options = null;
+			var lRes = ws.broadcastText(pool, msg.value, options);
+			//log(toString(lRes));
+		} catch (e) {
+			log(e.message);
+		}
+	}
+
+	function initEventCnt() {
+		onopenCnt.innerHTML = 0;
+		onmessageCnt.innerHTML = 0;
+		oncloseCnt.innerHTML = 0;
+	}
+
+	function createJWebSocketJSONClient() {
+		if (jws.browserSupportsWebSockets()) {
+			return new jws.jWebSocketJSONClient();
+			//return new jws.jWebSocketTokenClient();
+		} else {
+			log("not supported");
+			return null;
+		}
+	}
+
+	function logon(ws) {
+		try {
+			log("connecting to " + getUrl());
+			log("user : " + user.value);
+			log("pass : " + pass.value);
+			var lRes = ws.logon(getUrl(), user.value, pass.value, connectOptions);
+			//log(toString(lRes));
+		} catch (e) {
+			log(e.message);
+		}
+	}
+
+	function oopen(ws) {
+		try {
+			log("connecting to " + getUrl());
+			var lRes = ws.open(getUrl(), connectOptions);
+			//log(toString(lRes));
+		} catch (e) {
+			log(e.message);
+		}
+	}
+
+	function getUrl() {
+		//if (window.location.protocol == "http:") {
+		return "ws://" + url.value;
+		//} else {
+		//	return "wss://" + url.value;
+		//}
+	}
+
+	function toString(obj) {
+		var s = "";
+		for ( var attr in obj) {
+			s += attr + " : " + obj[attr] + "\n";
+		}
+		return s;
+	}
+
+	function enableConsole(ele, flag) {
+		if (flag) {
+			ele.value = "콘솔 비활성화";
+			ele.onclick = function(event) {
+				enableConsole(ele, false);
+			};
+		} else {
+			ele.value = "콘솔 활성화";
+			ele.onclick = function(event) {
+				enableConsole(ele, true);
+			};
+		}
+		consoleEnable = flag;
+	}
+	function replaceAll(str, serchStr, replaceStr) {
+		return str.split(serchStr).join(replaceStr);
+	}
+	function log(msg) {
+		if (consoleEnable) {
+			msg = replaceAll(msg, "\16", "♬");
+			msg = replaceAll(msg, "\f", "♀");
+			console.value += msg;
+			console.value += '\n';
+			console.scrollTop = console.scrollHeight;
+		}
+	}
+</script>
+</head>
+<body>
+	<textarea id="console" rows="40" cols="100" style="background-color: black; color: white;"></textarea>
+	<br>
+	<table border="1">
+		<tr>
+			<td rowspan="2" align="center">이벤트 발생 수</td>
+			<td>OnOpen</td>
+			<td>OnMessage</td>
+			<td>OnClose</td>
+		</tr>
+		<tr align="center">
+			<td id="onopenCnt">0</td>
+			<td id="onmessageCnt">0</td>
+			<td id="oncloseCnt">0</td>
+		</tr>
+	</table>
+	<input type="button" value="logon(open+login)" onclick="logonAll()">
+	<input type="button" value="open" onclick="openAll()">
+	<input type="button" value="close" onclick="closeAll()">
+	<input type="button" value="login" onclick="loginAll()">
+	<input type="button" value="logout" onclick="logoutAll()">
+	<input type="button" value="echo" onclick="echoAll()">
+	<input type="button" value="sendText" onclick="sendTextAll()">
+	<input type="button" value="broadcastText" onclick="broadcastTextAll()">
+	<br>
+	<input type="button" value="이벤트 발생 수 초기화" onclick="initEventCnt()">
+	<input type="button" value="콘솔 초기화" onclick="console.value=''">
+	<input type="button" value="콘솔 비활성화" onclick="enableConsole(this, false)">
+	<br>
+	연결할 수 :
+	<input id="connectedCnt" type="text" size="10" style="text-align: center;" value="1">
+	<br>
+	메시지 (문자열 길이 15이상) :
+	<input id="msg" type="text" size="50" style="text-align: center;" value="101">
+	<br>
+	웹소켓 서버 URL :
+	<input id="url" type="text" size="50" style="text-align: center;" value="192.168.0.202:8787/jWebSocketAppServer-1.0/WebSocketDemo">
+	<br>
+	로그인 유저 :
+	<input id="user" type="text" size="10" style="text-align: center;" value="root">
+	로그인 암호 :
+	<input id="pass" type="text" size="10" style="text-align: center;" value="root">
+	<br>
+</body>
+</html>

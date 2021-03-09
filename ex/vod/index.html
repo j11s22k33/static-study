@@ -1,0 +1,68 @@
+<!DOCTYPE>
+<html lang="ko">
+<head>
+<title></title>
+<meta name="gtv-autozoom" content="off" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script type="text/javascript">
+	var _videoContainer = null;
+	var _ua = window.navigator.userAgent.toLowerCase();
+	var _browser = {
+		ipod : /webkit/.test(_ua) && /\(ipod/.test(_ua),
+		ipad : /webkit/.test(_ua) && /\(ipad/.test(_ua),
+		iphone : /webkit/.test(_ua) && /\(iphone/.test(_ua),
+		android : /webkit/.test(_ua) && /android/.test(_ua),
+		googletv : /googletv/.test(_ua),
+		galtab : /shw-m380w/.test(_ua),
+		msie : /msie/.test(_ua),
+		firefox : /firefox/.test(_ua),
+		opera : /opera/.test(_ua),
+		//apple : /apple/.test(_ua),
+		chrome : /chrome/.test(_ua),
+	};
+
+	function setVod(container) {
+		if (_browser.ipod || _browser.iphone) {
+			vod_ipod$iphone(container, "http://192.168.0.11:1935/vod/mp4:bit_24.mp4/playlist.m3u8"); //http
+		} else if (_browser.ipad) {
+			vod_ipad(container, "aaa.mp4"); //http
+		} else {
+			vod_web(container, "rtmp://192.168.0.11/vod/", "bit_24.mp4"); //rtmp
+		}
+	}
+	function vod_ipod$iphone(node, src) { //http
+		//node.innerHTML = "<embed src='"+src+"' type='video/mp4' wmode='transparent' width='100%' height='100%' />";
+		node.innerHTML = "<video src='" + src + "' width='100%' height='100%' autoplay controls loop preload='auto';></video>";
+	}
+	function vod_web(node, streamer, file) { //rtmp
+		var html = "<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' width='100%' height='100%'>"
+		html += "<param name='movie' value='player.swf' />";
+		html += "<param name='allowfullscreen' value='true' />";
+		html += "<param name='allowscriptaccess' value='always' />";
+		html += "<param name='flashvars' value='file=mp4:" + file + "&streamer=" + streamer + "&menu=false&controlbar=over&autostart=true' />";
+		html += "<embed" + " type='application/x-shockwave-flash'" + " src='player.swf'" + " width='100%'" + " height='100%'" + " allowscriptaccess='always'" + " allowfullscreen='true'" + " flashvars='file=mp4:" + file + "&streamer=" + streamer + "&menu=false&controlbar=over&autostart=true'" + "/>";
+		html += "</object>";
+		node.innerHTML = html;
+	}
+	function vod_ipad(node, src) { //http
+		node.innerHTML = "<video src='" + src + "' width='100%' height='100%' autoplay controls loop preload='auto';></video>";
+	}
+	function vod_android(node, href) { //
+		node.innerHTML = "<a href='"+href+"'></a>"
+	}
+	function logBrowser() {
+		for ( var attr in _browser) {
+			console.log("[" + attr + "] " + _browser[attr]);
+		}
+	}
+
+	window.onload = function() {
+		logBrowser();
+		setVod(document.getElementById("videoContainer"));
+	}
+</script>
+</head>
+<body style="padding: 0px; margin: 0px; background-color: transparent; overflow: hidden;">
+	<div id='videoContainer'></div>
+</body>
+</html>

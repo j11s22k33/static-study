@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<script type="text/javascript">
+	window.onload = function() {
+		//로컬/세션 스토리지에 객체는 안들어간다
+		//객체를 문자열로 변환시켜 저장
+
+		//로컬 (영구 저장)
+		log("------------localStorage-----------");
+		if (Storage && localStorage) {
+			var string = JSON.stringify([ "111", "222", "333" ]);
+
+			localStorage.setItem("localStoragekey", string);
+
+			var item = localStorage.getItem("localStoragekey");
+
+			var parseData = JSON.parse(item);
+
+			log(typeof (parseData));
+			for ( var a in parseData) {
+				log(a + " : " + parseData[a]);
+			}
+		} else {
+			alert("not supported localStorage");
+		}
+
+		//세션 (세션에 종속)
+		log("------------sessionStorage-----------");
+		if (Storage && sessionStorage) {
+			var string = JSON.stringify([ "111", "222", "333" ]);
+			
+			sessionStorage.setItem("sessionStoragekey", string);
+			
+			var item = sessionStorage.getItem("sessionStoragekey");
+
+			var parseData = JSON.parse(item);
+
+			log(typeof (parseData));
+			for ( var a in parseData) {
+				log(a + " : " + parseData[a]);
+			}
+		} else {
+			alert("not supported sessionStorage");
+		}
+	}
+	function log(msg) {
+		document.getElementById("result").innerHTML += msg + "<br>";
+	}
+	function log1(msg) {
+		document.getElementById("result1").innerHTML += msg + "<br>";
+	}
+</script>
+</head>
+<body>
+	<h1 id="result"></h1>
+	<h1 id="result1"></h1>
+</body>
+</html>

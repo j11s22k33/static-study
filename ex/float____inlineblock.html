@@ -1,0 +1,49 @@
+<!DOCTYPE>
+<html>
+<head>
+<title></title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<style>
+	.float-container {
+		outline: 1px dotted red;
+	}
+	
+	.float-container::after {
+		display: block;
+		content: '';
+		clear: both;
+	}
+	
+	.float-left {
+		width: 200px;
+		height: 200px;
+		outline: 1px dotted black;
+		float: left;
+	}
+	
+	.inline-block-container {
+		outline: 1px dotted red;
+	}
+	.inline-block {
+		width: 200px;
+		height: 200px;
+		outline: 1px dotted black;
+		display: inline-block;
+	}
+</style>
+</head>
+<body>
+	<!-- inline-block white space 문제있음  차라리 float를 쓰자 -->
+	<div class="inline-block-container">
+		<div class="inline-block"></div>
+		<div class="inline-block"></div>
+		<div class="inline-block"></div>
+	</div>
+	<div class="float-container">
+		<div class="float-left"></div>
+		<div class="float-left"></div>
+		<div class="float-left"></div>
+	</div>
+</body>
+</html>

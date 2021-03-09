@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<script type="text/javascript">
+	var wss = [];
+	var msg = null;
+	var url = null;
+	var subPort = null;
+	var console = null;
+	var consoleEnable = true;
+	var onopenCnt = null;
+	var onmessageCnt = null;
+	var oncloseCnt = null;
+	var onerrorCnt = null;
+	var connectedCnt = null;
+
+	var connectingStateCnt = null;
+	var openStateCnt = null;
+	var closingStateCnt = null;
+	var closedStateCnt = null;
+	var bufferedAmountState = null;
+	var protocolState = null;
+	var urlState = null;
+
+	window.onload = function() {
+		console = document.getElementById("console");
+		msg = document.getElementById("msg");
+		url = document.getElementById("url");
+		subPort = document.getElementById("subPort");
+		onopenCnt = document.getElementById("onopenCnt");
+		onmessageCnt = document.getElementById("onmessageCnt");
+		oncloseCnt = document.getElementById("oncloseCnt");
+		onerrorCnt = document.getElementById("onerrorCnt");
+		connectedCnt = document.getElementById("connectedCnt");
+
+		connectingStateCnt = document.getElementById("connectingStateCnt");
+		openStateCnt = document.getElementById("openStateCnt");
+		closingStateCnt = document.getElementById("closingStateCnt");
+		closedStateCnt = document.getElementById("closedStateCnt");
+		bufferedAmountState = document.getElementById("bufferedAmountState");
+		protocolState = document.getElementById("protocolState");
+		urlState = document.getElementById("urlState");
+	};
+
+	function initEventCnt() {
+		onopenCnt.innerHTML = 0;
+		onmessageCnt.innerHTML = 0;
+		oncloseCnt.innerHTML = 0;
+		onerrorCnt.innerHTML = 0;
+	}
+
+	function initStateCnt() {
+		connectingStateCnt.innerHTML = 0;
+		openStateCnt.innerHTML = 0;
+		closingStateCnt.innerHTML = 0;
+		closedStateCnt.innerHTML = 0;
+		bufferedAmountState.innerHTML = 0;
+		protocolState.innerHTML = "";
+		urlState.innerHTML = "";
+	}
+
+	function connectAll() {
+		for ( var i = 0; i < connectedCnt.value; i++) {
+			var ws = connect(url.value, subPort.value);
+			if (ws) {
+				wss.push(ws);
+			}
+		}
+	}
+
+	function connect(target, subPort) {
+		if (window.location.protocol == "http:") {
+			target = "ws://" + target;
+		} else {
+			target = "wss://" + target;
+		}
+
+		var ws;
+
+		if ('WebSocket' in window) {
+			ws = new WebSocket(target, subPort);
+		} else if ('MozWebSocket' in window) {
+			ws = new MozWebSocket(target, subPort);
+		}
+
+		if (ws) {
+			ws.onopen = function(event) {
+				log('onopen.');
+				onopenCnt.innerHTML = Number(onopenCnt.innerHTML) + 1;
+			};
+			ws.onmessage = function(event) {
+				log('onmessage : ' + event.data);
+				onmessageCnt.innerHTML = Number(onmessageCnt.innerHTML) + 1;
+			};
+			ws.onclose = function(event) {
+				log('onclose.');
+				oncloseCnt.innerHTML = Number(oncloseCnt.innerHTML) + 1;
+			};
+			ws.onerror = function(event) {
+				log('onerror.');
+				onerrorCnt.innerHTML = Number(onerrorCnt.innerHTML) + 1;
+			}
+		}
+		return ws;
+	}
+
+	function disconnectAll() {
+		for ( var i = 0; i < wss.length; i++) {
+			wss[i].close();
+		}
+	}
+
+	function sendmsgAll() {
+		for ( var i = 0; i < wss.length; i++) {
+			wss[i].send(msg.value); // 메세지 길이가 15 이상부터 ws.onmessage 이벤트가 제대로 발생한다
+		}
+	}
+
+	function researchSocketState() {
+		for ( var i = 0; i < wss.length; i++) {
+			switch (wss[i].readyState) {
+			case 0: //CONNECTING
+				connectingStateCnt.innerHTML = Number(connectingStateCnt.innerHTML) + 1;
+				break;
+			case 1: //OPEN
+				openStateCnt.innerHTML = Number(openStateCnt.innerHTML) + 1;
+				break;
+			case 2: //CLOSING
+				closingStateCnt.innerHTML = Number(closingStateCnt.innerHTML) + 1;
+				break;
+			case 3: //CLOSED
+				closedStateCnt.innerHTML = Number(closedStateCnt.innerHTML) + 1;
+				break;
+			}
+		}
+
+		bufferedAmountState.innerHTML = wss[0].bufferedAmount;
+		protocolState.innerHTML = wss[0].protocol;
+		urlState.innerHTML = wss[0].url;
+	}
+	function enableConsole(ele, flag) {
+		if (flag) {
+			ele.value = "콘솔 비활성화";
+			ele.onclick = function(event) {
+				enableConsole(ele, false);
+			};
+		} else {
+			ele.value = "콘솔 활성화";
+			ele.onclick = function(event) {
+				enableConsole(ele, true);
+			};
+		}
+		consoleEnable = flag;
+	}
+	function log(msg) {
+		if (consoleEnable) {
+			console.value += msg;
+			console.value += '\n';
+			console.scrollTop = console.scrollHeight;
+		}
+	}
+</script>
+</head>
+<body style="padding: 0px; margin: 0px; background-color: transparent;">
+	<textarea id="console" rows="15" cols="100" style="background-color: black; color: white;"></textarea>
+	<table border="1">
+		<tr>
+			<td rowspan="2" align="center">이벤트 발생 수</td>
+			<td>onopen</td>
+			<td>onmessage</td>
+			<td>onclose</td>
+			<td>onerror</td>
+		</tr>
+		<tr align="center">
+			<td id="onopenCnt">0</td>
+			<td id="onmessageCnt">0</td>
+			<td id="oncloseCnt">0</td>
+			<td id="onerrorCnt">0</td>
+		</tr>
+	</table>
+	<table border="1">
+		<tr>
+			<td rowspan="2" align="center">소켓 상태 (readyState)</td>
+			<td>CONNECTING</td>
+			<td>OPEN</td>
+			<td>CLOSING</td>
+			<td>CLOSED</td>
+			<td>bufferedAmount</td>
+			<td>protocol</td>
+			<td>url</td>
+		</tr>
+		<tr align="center">
+			<td id="connectingStateCnt">0</td>
+			<td id="openStateCnt">0</td>
+			<td id="closingStateCnt">0</td>
+			<td id="closedStateCnt">0</td>
+			<td id="bufferedAmountState">0</td>
+			<td id="protocolState"></td>
+			<td id="urlState"></td>
+		</tr>
+	</table>
+	<input type="button" value="연결하기" onclick="connectAll();">
+	<input type="button" value="접속종료" onclick="disconnectAll()">
+	<input type="button" value="메시지보내기" onclick="sendmsgAll()">
+	<input type="button" value="소켓상태조사" onclick="researchSocketState()">
+	<br>
+	<input type="button" value="이벤트 발생 수 초기화" onclick="initEventCnt()">
+	<input type="button" value="소켓상태조사 초기화" onclick="initStateCnt()">
+	<input type="button" value="콘솔 초기화" onclick="console.value=''">
+	<input type="button" value="콘솔 비활성화" onclick="enableConsole(this, false)">
+	<br> 연결할 수 :
+	<input id="connectedCnt" type="text" size="10" style="text-align: center;" value="1">
+	<br> 메시지 (문자열 길이 15이상) :
+	<input id="msg" type="text" size="50" style="text-align: center;" value="echo messages...">
+	<br> 웹소켓 서버 URL :
+	<input id="url" type="text" size="50" style="text-align: center;" value="192.168.0.202:8080/webSocket/"> &nbsp;&nbsp;&nbsp;SUB PORT :
+	<input id="subPort" type="text" size="10" style="text-align: center;" value="8787">
+	<br>
+	<br>
+</body>
+</html>

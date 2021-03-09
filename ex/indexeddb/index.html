@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title></title>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+<link rel="shortcut icon" href="images/icon.png">
+<link rel="apple-touch-icon" href="images/icon.png">
+<link rel="stylesheet" href="css/jquery.mobile-1.3.0.min.css" />
+
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/jquery.mobile-1.3.0.min.js"></script>
+<script src="js/jquery.indexeddb.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		test();
+	});
+
+	// Code to create object stores and add data
+	function test(){
+		$.indexedDB("databaseName", {
+			"schema" : {
+				"1" : function(versionTransaction) {
+					versionTransaction.createObjectStore("objectStore1");
+				},
+				"2" : function(versionTransaction) {
+					versionTransaction.createObjectStore("objectStore2");
+				}
+			}
+		}).transaction([ "objectStore1", "objectStore2" ]).then(function() {
+			console.log("Transaction completed");
+		}, function() {
+			console.log("Transaction aborted");
+		}, function(t) {
+			console.log("Transaction in progress");
+			t.objectStore("objectStore1").add({
+				//t.objectStore("objectStore1").put({
+				"valueProp" : "val",
+				"anotherProp" : 2
+			}, 1).then(function() {
+				console.log("Data added");
+			}, function() {
+				console.log("Error adding data");
+			});
+		});
+	}
+	
+	/**
+	#
+	#
+	#
+	#
+	#
+	#
+	#
+	#
+	#
+	#
+	##########################################
+	/////////////////////// JQuery sample ///////////////////////////
+	##########################################
+	*/
+	//create object store	
+	function createObjectStore() {
+		$.indexedDB("BookShop1", {
+			"schema" : {
+				2 : function(v) {
+					var objectStore = v.createObjectStore("BookList", {
+						"keyPath" : "id",
+						"autoIncrement" : true
+					});
+					objectStore.createIndex("price");
+					console.info("Created new object store");
+				}
+			}
+		}).then(console.info, console.error);
+	}
+	//delete object store
+	function deleteObjectStore() {
+		$.indexedDB("BookShop1", 3).then(console.info, console.error, function(v) {
+			v.deleteObjectStore("TempBookList");
+			console.info("Object Store deleted");
+		});
+	}
+	//transaction
+	function Transaction() {
+		var transaction = $.indexedDB("BookShop1").transaction([ "OldBookList", "BookList" ], $.indexedDB.IDBTransaction.READ_WRITE);
+		transaction.then(console.info, console.error);
+		transaction.progress(function(t) {
+			t.objectStore("BookList").add(data()).then(console.info, console.error);
+			t.objectStore("OldBookList").add(data(), new Date().getTime()).then(console.info, console.error);
+		});
+	}
+	//open object store, but don't create if does not exist
+	function openObjectStore_0() {
+		$.indexedDB("BookShop1").objectStore("BookList", false);
+	}
+	//open object store, or create if does not exist
+	function openObjectStore_1() {
+		$.indexedDB("BookShop1").objectStore("BookList", {
+			"keyPath" : "id",
+			"autoIncrement" : true
+		});
+	}
+	//add data to object store
+	function addDataToObjectStore() {
+		window.book = data();
+		$.indexedDB("BookShop1").objectStore("BookList", true).add(book).then(function(val) {
+			book.id = val;
+			console.info(val);
+		}, console.error);
+	}
+	//get data
+	function getData() {
+		$.indexedDB("BookShop1").objectStore("BookList").get(book.id).then(console.info, console.error);
+	}
+	//modify data in object store
+	function modifyDataInObjectStore() {
+		book["modified" + Math.random()] = true;
+		$.indexedDB("BookShop1").objectStore("BookList").put(book, new Date().getTime()).then(console.info, console.error);
+	}
+	//cursor and list all items in ter object store
+	function cursorAndListAllItems() {
+		$.indexedDB("BookShop1").objectStore("BookList").each(console.info);
+	}
+	//cursor and delete items with price that is an odd number
+	function cursorAndDeleteItems() {
+		$.indexedDB("BookShop1").objectStore("BookList").each(function(elem) {
+			if (elem.value && elem.value.price % 2) {
+				console.info("Deleting", elem.value);
+				elem["delete"]();
+				return true;
+			}
+		});
+	}
+	//cursor and update items with price that is an even number
+	function cursorAndUpdateItems() {
+		$.indexedDB("BookShop1").objectStore("BookList").each(function(elem) {
+			if (elem.value && elem.value.price % 2) {
+				console.info("Updating", elem.value);
+				elem.value["modifiedCursor-" + Math.random()] = true;
+				elem.update(elem.value);
+			}
+		});
+	}
+	//open an index and iterate over it's objects
+	function openAnIndex() {
+		$.indexedDB("BookShop1").objectStore("BookList").index("price").each(console.info);
+	}
+	//open a key cursor on an index and iterate over it's objects
+	function openAKeyCursor() {
+		$.indexedDB("BookShop1").objectStore("BookList").index("price").eachKey(console.info, [ 200, 500 ]);
+	}
+	/**
+	#
+	#
+	#
+	#
+	#
+	#
+	#
+	#
+	#
+	#
+	##########################################
+	/////////////////////// original sample //////////////////////////
+	##########################################
+	*/
+	//create object store	
+	function createObjectStore() {
+		var request = window.indexedDB.open("BookShop1");
+		request.onsuccess = function(event) {
+			var db = request.result;
+			var req = db.setVersion((isNaN(parseInt(db.version, 10)) ? 0 : parseInt(db.version, 10) + 1));
+			req.onsuccess = function() {
+				var transaction = req.result;
+				var objectStore = transaction.db.createObjectStore("BookList", {
+					"keyPath" : "id",
+					"autoIncrement" : true
+				});
+				objectStore.createIndex("price");
+				console.info(objectStore);
+			};
+			req.onerror = function(e) {
+				console.error(e, req);
+			};
+		};
+		request.onerror = function(e) {
+			console.error(e, request);
+		};
+	}
+	//delete object store
+	function deleteObjectStore() {
+		var request = window.indexedDB.open("BookShop1");
+		request.onsuccess = function(event) {
+			var db = request.result;
+			var req = db.setVersion((isNaN(parseInt(db.version, 10)) ? 0 : parseInt(db.version, 10) + 1));
+			req.onsuccess = function() {
+				var transaction = req.result;
+				transaction.db.deleteObjectStore("TempBookList");
+				console.info(transaction.db);
+			};
+			req.onerror = function(e) {
+				console.error(e, req);
+			};
+		};
+		request.onerror = function(e) {
+			console.error(e, request);
+		};
+	}
+	//transaction
+	function Transaction() {
+		var request = window.indexedDB.open("BookShop1");
+		request.onsuccess = function(event) {
+			var db = request.result;
+			var transaction = db.transaction([], IDBTransaction.READ_WRITE);
+			console.info(transaction);
+			var bookList = transaction.objectStore("BookList");
+			var oldBookList = transaction.objectStore("OldBookList");
+			var req1 = bookList.add(data());
+			var req2 = oldBookList.add(data(), new Date().getTime());
+			req1.onsuccess = function() {
+				console.info(req1.result);
+			};
+			req1.onerror = function(e) {
+				console.error(e, req1);
+			};
+			req2.onsuccess = function() {
+				console.info(req2.result);
+			};
+			req2.onerror = function(e) {
+				console.error(e, req2);
+			};
+		};
+		request.onerror = function(e) {
+			console.error(e, request);
+		};
+	}
+	//open object store, but don't create if does not exist
+	function openObjectStore_0() {
+		var request = window.indexedDB.open("BookShop1");
+		request.onsuccess = function(event) {
+			var db = request.result;
+			try {
+				var transaction = db.transaction([], IDBTransaction.READ_WRITE);
+				var objectStore = transaction.objectStore("BookList");
+				console.info(objectStore);
+			} catch (e) {
+				console.error(e, request);
+			}
+		};
+		request.onerror = function(e) {
+			console.error(e, request);
+		};
+	}
+	//open object store, or create if does not exist
+	function openObjectStore_1() {
+		var request = window.indexedDB.open("BookShop1");
+		request.onsuccess = function(event) {
+			var db = request.result;
+			try {
+				var transaction = db.transaction([], IDBTransaction.READ_WRITE);
+				var objectStore = transaction.objectStore("BookList");
+				console.info(objectStore);
+			} catch (e) {
+				var req = db.setVersion((isNaN(parseInt(db.version, 10)) ? 0 : parseInt(db.version, 10) + 1));
+				req.onsuccess = function() {
+					var transaction = req.result;
+					var objectStore = transaction.db.createObjectStore("BookList", {
+						"autoIncrement" : true
+					});
+					console.info(objectStore);
+				};
+				req.onerror = function(e) {
+					console.error(e, req);
+				};
+			}
+
+		};
+		request.onerror = function(e) {
+			console.error(e, request);
+		};
+	}
+	//add data to object store
+	function addDataToObjectStore() {
+		window.book = data();
+		var request = window.indexedDB.open("BookShop1");
+		request.onsuccess = function(event) {
+			var db = request.result;
+			var transaction = db.transaction([], IDBTransaction.READ_WRITE);
+			var bookList = transaction.objectStore("BookList");
+			var req = bookList.add(data());
+			req.onsuccess = function() {
+				book.id = req.result;
+				console.info(req.result);
+			};
+			req.onerror = function(e) {
+				console.error(e, req);
+			};
+		};
+		request.onerror = function(e) {
+			console.error(e, request);
+		};
+	}
+	//get data
+	function getData() {
+		var request = window.indexedDB.open("BookShop1");
+		request.onsuccess = function(event) {
+			var db = request.result;
+			var transaction = db.transaction([], IDBTransaction.READ_WRITE);
+			var bookList = transaction.objectStore("BookList");
+			var req = bookList.get(book.id);
+			req.onsuccess = function() {
+				console.info(req.result);
+			};
+			req.onerror = function(e) {
+				console.error(e, req);
+			};
+		};
+		request.onerror = function(e) {
+			console.error(e, request);
+		};
+	}
+	//modify data in object store
+	function modifyDataInObjectStore() {
+		book["modified" + Math.random()] = true;
+		var request = window.indexedDB.open("BookShop1");
+		request.onsuccess = function(event) {
+			var db = request.result;
+			var transaction = db.transaction([], IDBTransaction.READ_WRITE);
+			var bookList = transaction.objectStore("BookList");
+			var req = bookList.put(data(), new Date().getTime());
+			req.onsuccess = function() {
+				console.info(req.result);
+			};
+			req.onerror = function(e) {
+				console.error(e, req);
+			};
+		};
+		request.onerror = function(e) {
+			console.error(e, request);
+		};
+	}
+	//cursor and list all items in ter object store
+	function cursorAndListAllItems() {
+		var request = window.indexedDB.open("BookShop1");
+		request.onsuccess = function(event) {
+			var db = request.result;
+			var transaction = db.transaction([], IDBTransaction.READ_WRITE);
+			var bookList = transaction.objectStore("BookList");
+			var req = bookList.openCursor();
+			req.onsuccess = function() {
+				var cursor = req.result;
+				if (cursor) {
+					console.info(req.result.value);
+					cursor["continue"]();
+				}
+			};
+			req.onerror = function(e) {
+				console.error(e, req);
+			};
+		};
+		request.onerror = function(e) {
+			console.error(e, request);
+		};
+	}
+	//cursor and delete items with price that is an odd number
+	function cursorAndDeleteItems() {
+		var request = window.indexedDB.open("BookShop1");
+		request.onsuccess = function(event) {
+			var db = request.result;
+			var transaction = db.transaction([], IDBTransaction.READ_WRITE);
+			var bookList = transaction.objectStore("BookList");
+			var req = bookList.openCursor();
+			req.onsuccess = function() {
+				var cursor = req.result;
+				if (cursor) {
+					if (cursor.value && cursor.value.price % 2) {
+						console.info("Deleting", cursor.value);
+						cursor["delete"]();
+					}
+					cursor["continue"]();
+				}
+			};
+			req.onerror = function(e) {
+				console.error(e, req);
+			};
+		};
+		request.onerror = function(e) {
+			console.error(e, request);
+		};
+	}
+	//cursor and update items with price that is an even number
+	function cursorAndUpdateItems() {
+		var request = window.indexedDB.open("BookShop1");
+		request.onsuccess = function(event) {
+			var db = request.result;
+			var transaction = db.transaction([], IDBTransaction.READ_WRITE);
+			var bookList = transaction.objectStore("BookList");
+			var req = bookList.openCursor();
+			req.onsuccess = function() {
+				var cursor = req.result;
+				if (cursor) {
+					if (cursor.value && cursor.value.price % 2) {
+						cursor.value["modified-" + Math.random()] = true;
+						console.info("Updating", cursor.value);
+						cursor.update(cursor.value);
+					}
+					cursor["continue"]();
+				}
+			};
+			req.onerror = function(e) {
+				console.error(e, req);
+			};
+		};
+		request.onerror = function(e) {
+			console.error(e, request);
+		};
+	}
+	//open an index and iterate over it's objects
+	function openAnIndex() {
+		var request = window.indexedDB.open("BookShop1");
+		request.onsuccess = function(event) {
+			var db = request.result;
+			var transaction = db.transaction([], IDBTransaction.READ_WRITE);
+			var bookList = transaction.objectStore("BookList");
+			// Assuming that index exists
+			var index = bookList.index("price-index");
+			var req = index.openCursor();
+			req.onsuccess = function() {
+				var cursor = req.result;
+				if (cursor) {
+					console.info(cursor.value);
+					cursor["continue"]();
+				}
+			};
+			req.onerror = function(e) {
+				console.error(e, req);
+			};
+		};
+		request.onerror = function(e) {
+			console.error(e, request);
+		};
+	}
+	//open a key cursor on an index and iterate over it's objects
+	function openAKeyCursor() {
+		var request = window.indexedDB.open("BookShop1");
+		request.onsuccess = function(event) {
+			var db = request.result;
+			var transaction = db.transaction([], IDBTransaction.READ_WRITE);
+			var bookList = transaction.objectStore("BookList");
+			var index = bookList.index("price-index");
+			var range = new IDBKeyRange.bound(200, 500, true, true);
+			var req = index.openKeyCursor(range);
+			req.onsuccess = function() {
+				var cursor = req.result;
+				if (cursor) {
+					console.info(cursor.value, cursor.key);
+					cursor["continue"]();
+				}
+
+			};
+			req.onerror = function(e) {
+				console.error(e, req);
+			};
+		};
+		request.onerror = function(e) {
+			console.error(e, request);
+		};
+	}
+</script>
+</head>
+
+<body>
+
+</body>
+</html>
