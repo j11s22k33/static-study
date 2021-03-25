@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <script src="utils.js"></script>
+    <script>
+      let matched = RegExp("^([0-9]{2}):([0-9]{2}):([0-9]{2})$").exec(
+        "01:00:00"
+      );
+      let d = new Date();
+      d.setTime(0);
+      d.setDate(matched[1]);
+      d.setHours(matched[2]);
+
+      let untiltime = new Date(purchased_date).getTime() + d.getTime();
+      let difftime = untiltime - new Date().getTime();
+      d.setTime(difftime);
+      let tmp = new Array();
+      if (d.getDate() > 0) tmp.push(d.getDate().zf(2) + "일");
+      if (d.getHours() > 0) tmp.push(d.getHours().zf(2) + "시간");
+      if (d.getDate() > 0) tmp.push(d.getMinutes().zf(2) + "분");
+      return `시청가능기간 (${tmp.join(" ")})`;
+    </script>
+  </head>
+  <body></body>
+</html>

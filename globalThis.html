@@ -3,7 +3,6 @@
 
   // node.js 환경에서 window is not defined 이다.
   // 서로 다른 환경에서 전역 객체 얻는 방법은 아래와 같다
-
   var getGlobal = function () {
     if (typeof globalThis !== "undefined") {
       return globalThis;
